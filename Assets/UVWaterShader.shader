@@ -7,7 +7,7 @@ Shader "Unlit/UVWaterShader"
         _VerticalSpeed ("VerticalSpeed", Range(1, 100)) = 10
         _XShift("Xuv Shift", Range(-1.0, 1.0)) = 0.1
         _YShift("Yuv Shift", Range(-1.0, 1.0)) = 0.1
-        _WaveParameter("Wave Parameter", Range(-1.0, 1.0)) = 0.1
+        _WaveHeight("Wave Parameter", Range(0, 1.0)) = 0.3
     }
     SubShader
     {
@@ -43,14 +43,14 @@ Shader "Unlit/UVWaterShader"
             float _VerticalSpeed;
             float _XShift;
             float _YShift;
-            float _WaveParameter;
+            float _WaveHeight;
 
             v2f vert (appdata v)
             {
                 v2f o;
                 float delta = (_SinTime.w + 1.0) / 2.0;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.vertex.y += sin(v.vertex.x + _Time.y *10) * _WaveParameter;
+                o.vertex.y += ((sin(v.vertex.x + delta))*(cos(v.vertex.z + delta))) * _WaveHeight;
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;
